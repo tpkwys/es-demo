@@ -1,0 +1,48 @@
+plugins {
+    id 'org.springframework.boot' version '2.2.2.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+    id 'java'
+}
+
+group = 'com.aaron'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '2.2.2.RELEASE'
+    implementation 'org.springframework.boot:spring-boot-starter'
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+
+    // es client 依赖
+    // https://mvnrepository.com/artifact/org.elasticsearch/elasticsearch
+    //本来 elasticsearch-rest-high-level-client依赖的有该包，但是依赖的版本太低了 查询时报异常，
+    // java.lang.NoSuchMethodError: org.elasticsearch.action.search.SearchRequest.isCcsMinimizeRoundtrips()Z 手动剔除依赖 增加改依赖
+    compile group: 'org.elasticsearch', name: 'elasticsearch', version: '7.5.0'
+    // https://mvnrepository.com/artifact/org.elasticsearch.client/elasticsearch-rest-client
+    compile 'org.elasticsearch.client:elasticsearch-rest-client:7.5.0'
+   // https://mvnrepository.com/artifact/org.elasticsearch.client/elasticsearch-rest-high-level-client
+    compile ('org.elasticsearch.client:elasticsearch-rest-high-level-client:7.5.0'){
+        exclude group: 'org.elasticsearch',  module:'elasticsearch'
+        exclude group: 'org.elasticsearch.client', module:'elasticsearch-rest-client'
+    }
+
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
+    // https://mvnrepository.com/artifact/com.alibaba/fastjson
+    compile group: 'com.alibaba', name: 'fastjson', version: '1.2.62'
+// https://mvnrepository.com/artifact/com.alibaba/easyexcel
+    compile group: 'com.alibaba', name: 'easyexcel', version: '2.1.4'
+
+
+}
+
+test {
+    useJUnitPlatform()
+}
